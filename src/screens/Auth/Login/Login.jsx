@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { Form, FormGroup, Label, Input, Button, Alert } from "reactstrap";
 import { login } from "../../../redux/actions/authActions";
 import { useDispatch } from "react-redux";
+import { validateField, validateForm } from "../../../utils/validationUtils";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const loginFields = ["email", "password"];
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,42 +19,6 @@ const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-
-  const validateField = (name, value) => {
-    let error = "";
-    switch (name) {
-      case "email":
-        if (!value) {
-          error = "Email is required.";
-        } else if (!/\S+@\S+\.\S+/.test(value)) {
-          error = "Email is not valid.";
-        }
-        break;
-      case "password":
-        if (!value) {
-          error = "Password is required.";
-        }
-        break;
-      default:
-        break;
-    }
-    return error;
-  };
-
-  const validateFormFields = (currentFormData) => {
-    let newFieldErrors = {};
-    let formFieldsAreValid = true;
-
-    const fields = ["email", "password"];
-    fields.forEach((field) => {
-      const error = validateField(field, currentFormData[field]);
-      if (error) {
-        newFieldErrors[field] = error;
-        formFieldsAreValid = false;
-      }
-    });
-    return { newFieldErrors, formFieldsAreValid };
-  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -65,18 +31,10 @@ const Login = () => {
         [name]: value,
       }));
 
-      if (hasAttemptedSubmit) {
-        setErrors((prevErrors) => {
-          const updatedErrors = { ...prevErrors, api: "" };
-          updatedErrors[name] = validateField(name, value);
-          return updatedErrors;
-        });
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [name]: "",
-        }));
-      }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: validateField(name, value),
+      }));
     }
   };
 
@@ -95,15 +53,16 @@ const Login = () => {
     setIsSubmitting(true);
     setHasAttemptedSubmit(true);
 
-    const { newFieldErrors, formFieldsAreValid } = validateFormFields(formData);
-    setErrors((prevErrors) => ({ ...newFieldErrors, api: "" }));
+    const { errors: newErrors, isValid: formFieldsAreValid } = validateForm(
+      loginFields,
+      formData
+    );
 
-    console.log('formFieldsAreValid', formFieldsAreValid)
+    setErrors(newErrors);
 
     if (formFieldsAreValid) {
       try {
         await dispatch(login(formData));
-        alert("Login successful! Navigating to dashboard.");
         navigate("/dashboard")
       } catch (error) {
         console.error("Login error:", error.message);
@@ -116,7 +75,6 @@ const Login = () => {
       }
     } else {
       setIsSubmitting(false);
-      console.log("Form has validation errors, preventing login.");
     }
   };
 

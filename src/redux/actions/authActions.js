@@ -40,6 +40,7 @@ export const login = (credentials) => {
             localStorage.setItem("userInfo", JSON.stringify(loginResult.user));
         } catch (error) {
             dispatch({ type: "AUTH_FAILURE", payload: error.message });
+            throw error;
         }
     };
 };

@@ -1,18 +1,19 @@
 import React, { useMemo, useState } from "react";
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 import {
-  checkPasswordStrengthAndValidity,
   validateField,
   validateForm,
-} from '../../../utils/validation';
+} from '../../../utils/validationUtils';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { signupAndLogin } from "../../../redux/actions/authActions";
+import { checkPasswordStrengthAndValidity, getPasswordStrengthColor } from "../../../utils/paswordUtils";
 
 const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const signupFields = ["firstName", "lastName", "email", "password", "terms"];
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -78,13 +79,17 @@ const Signup = () => {
     setIsSubmitting(true);
     setHasAttemptedSubmit(true);
 
-    const { newErrors, formIsValid } = validateForm(formData, termsAccepted);
+    const { errors: newErrors, isValid: formIsValid } = validateForm(
+      signupFields,
+      formData,
+      { termsAccepted }
+    );
+
     setErrors(newErrors);
 
     if (formIsValid) {
       try {
         await dispatch(signupAndLogin(formData));
-        alert("Signup and Signin successful! Navigating to dashboard.");
         navigate("/dashboard");
       } catch (error) {
         console.error("Signup/Login Error:", error.message);
@@ -102,34 +107,6 @@ const Signup = () => {
     }
   };
 
-  const getPasswordStrengthColor = (strengthOrError) => {
-    if (
-      strengthOrError === "Weak" ||
-      strengthOrError.toLowerCase().includes("weak") ||
-      strengthOrError.toLowerCase().includes("required") ||
-      strengthOrError.toLowerCase().includes("between 6-18") ||
-      strengthOrError
-        .toLowerCase()
-        .includes("digit, one special character, and one letter")
-    )
-      return "text-danger";
-    if (
-      strengthOrError === "Fair" ||
-      strengthOrError.toLowerCase().includes("fair")
-    )
-      return "text-warning";
-    if (
-      strengthOrError === "Good" ||
-      strengthOrError.toLowerCase().includes("good")
-    )
-      return "text-primary";
-    if (
-      strengthOrError === "Strong" ||
-      strengthOrError.toLowerCase().includes("strong")
-    )
-      return "text-success";
-    return "text-muted";
-  };
 
   return (
     <>
@@ -141,7 +118,6 @@ const Signup = () => {
       <Form className="w-100 fs-6" onSubmit={handleSubmit} noValidate>
         {errors.api && <div className="text-danger mb-3">{errors.api}</div>}
 
-        {/* Firstname */}
         <FormGroup className="mb-3">
           <Label for="firstName" className="form-label text-dark fs-6">
             Firstname*
@@ -161,7 +137,6 @@ const Signup = () => {
           )}
         </FormGroup>
 
-        {/* Lastname */}
         <FormGroup className="mb-3">
           <Label for="lastName" className="form-label text-dark fs-6">
             Lastname*
@@ -181,7 +156,6 @@ const Signup = () => {
           )}
         </FormGroup>
 
-        {/* Email */}
         <FormGroup className="mb-3">
           <Label for="email" className="form-label text-dark fs-6">
             Email*
@@ -201,7 +175,6 @@ const Signup = () => {
           )}
         </FormGroup>
 
-        {/* Password */}
         <FormGroup className="mb-3">
           <Label for="password" className="form-label text-dark fs-6">
             Password*
@@ -236,7 +209,6 @@ const Signup = () => {
           )}
         </FormGroup>
 
-        {/* Checkbox "I agree to privacy policy & terms" */}
         <FormGroup check className="mb-4">
           <Input
             type="checkbox"
