@@ -1,23 +1,7 @@
 const API_BASE_URL = "http://streaming.nexlesoft.com:3001";
 
-export const isPasswordStrongEnoughForApi = (password) => {
-    const hasDigit = /[0-9]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    const hasLetter = /[a-zA-Z]/.test(password);
-    const isLengthValid = password.length >= 6 && password.length <= 18;
-
-    return hasDigit && hasSpecialChar && hasLetter && isLengthValid;
-};
-
 export const signupApi = async (userData) => {
     try {
-        if (!isPasswordStrongEnoughForApi(userData.password)) {
-            return Promise.reject({
-                success: false,
-                message: "Password does not meet server's strength requirements.",
-            });
-        }
-
         const response = await fetch(`${API_BASE_URL}/auth/signup`, {
             method: "POST",
             headers: {
@@ -55,7 +39,6 @@ export const loginApi = async (credentials) => {
             },
             body: JSON.stringify(credentials),
         });
-        console.log("response ", response)
 
         if (!response.ok) {
             const errorData = await response.json();

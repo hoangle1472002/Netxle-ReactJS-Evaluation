@@ -1,6 +1,6 @@
 const initialState = {
     loading: false,
-    user: null,
+    user: JSON.parse(localStorage.getItem("userInfo")) || null,
     accessToken: null,
     refreshToken: null,
     error: null,

@@ -1,2 +1,4 @@
-export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{6,18}$/;
+export const EMAIL_REGEX = /\S+@\S+\.\S+/;
+export const DIGIT_REGEX = /[0-9]/;
+export const SPECIAL_CHAR_REGEX = /[!@#$%^&*(),.?":{}|<>]/;
+export const LETTER_REGEX = /[a-zA-Z]/;

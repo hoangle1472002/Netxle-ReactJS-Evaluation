@@ -1,4 +1,5 @@
 import { checkPasswordStrengthAndValidity } from "./paswordUtils";
+import { EMAIL_REGEX, DIGIT_REGEX, SPECIAL_CHAR_REGEX, LETTER_REGEX } from "./regexUtils";
 
 const validateFirstName = (value) => {
     if (!value) return "First name is required.";
@@ -12,7 +13,7 @@ const validateLastName = (value) => {
 
 const validateEmail = (value) => {
     if (!value) return "Email is required.";
-    if (!/\S+@\S+\.\S+/.test(value)) return "Email is not valid.";
+    if (!EMAIL_REGEX.test(value)) return "Email is not valid.";
     return "";
 };
 
@@ -20,17 +21,20 @@ const validatePassword = (value) => {
     if (!value) return "Password is required.";
     if (value.length < 6 || value.length > 18)
         return "The password must be between 6-18 characters.";
+
     if (
-        !/[0-9]/.test(value) ||
-        !/[!@#$%^&*(),.?":{}|<>]/.test(value) ||
-        !/[a-zA-Z]/.test(value)
+        !DIGIT_REGEX.test(value) ||
+        !SPECIAL_CHAR_REGEX.test(value) ||
+        !LETTER_REGEX.test(value)
     ) {
         return "The password must contain at least one digit, one special character, and one letter.";
     }
+
     const strength = checkPasswordStrengthAndValidity(value);
     if (strength !== "Strong") {
         return `Password is ${strength.toLowerCase()}.`;
     }
+
     return "";
 };
 

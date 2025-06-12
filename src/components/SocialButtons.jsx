@@ -5,7 +5,7 @@ import TwitterIcon from './icons/Twitter.icon';
 import MailIcon from './icons/Mail.icon';
 import GithubIcon from './icons/Github.icon';
 
-const SocialButtons = () =>  {
+const SocialButtons = () => {
   const [hoveredIcon, setHoveredIcon] = useState(null);
 
   const commonButtonStyle = {
@@ -17,24 +17,24 @@ const SocialButtons = () =>  {
     borderRadius: '5px',
     padding: '0',
     transition: 'background-color 0.2s ease-in-out, border-color 0.2s ease-in-out',
-    border: '1px solid transparent', 
+    border: '1px solid transparent',
   };
 
   const socialColors = {
     facebook: {
-      base: '#3B5998', // Facebook Blue
-      hover: '#314A7F', // Slightly darker or brighter for hover
+      base: '#3B5998',
+      hover: '#314A7F',
     },
     twitter: {
-      base: '#00ACEE', // Twitter Blue
+      base: '#00ACEE',
       hover: '#008CC6',
     },
     mail: {
-      base: '#DB3236', // Google Mail Red
+      base: '#DB3236',
       hover: '#B5292D',
     },
     github: {
-      base: '#211F1F', // Github Dark Gray/Black
+      base: '#211F1F',
       hover: '#0A0A0A',
     },
   };
