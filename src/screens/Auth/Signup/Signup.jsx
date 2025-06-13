@@ -8,12 +8,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { signupAndLogin } from "../../../redux/actions/authActions";
 import { checkPasswordStrengthAndValidity, getPasswordStrengthColor } from "../../../utils/paswordUtils";
+import { isFormButtonDisabled } from "../../../utils/formUtils";
 
 const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const signupFields = ["firstName", "lastName", "email", "password", "terms"];
+  const signupFields = ["firstName", "lastName", "email", "password"];
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -59,20 +60,17 @@ const Signup = () => {
     }
   };
 
-  const isSignupButtonDisabled = useMemo(() => {
-    const fieldErrors = { ...errors };
-    delete fieldErrors.api;
-
-    return (
-      isSubmitting ||
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.password ||
-      Object.values(fieldErrors).some((error) => error !== "") ||
-      !termsAccepted
-    );
-  }, [isSubmitting, formData, errors, termsAccepted]);
+  const isSignupButtonDisabled = useMemo(
+    () =>
+      isFormButtonDisabled({
+        isSubmitting,
+        formData,
+        requiredFields: signupFields,
+        errors,
+        extraConditions: [termsAccepted],
+      }),
+    [isSubmitting, formData, errors, termsAccepted]
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
