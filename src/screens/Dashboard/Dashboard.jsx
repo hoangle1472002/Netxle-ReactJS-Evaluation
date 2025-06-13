@@ -15,6 +15,7 @@ import dashboardIllustration from "../../assets/dashboard-illustration.png";
 import defaultAvatar from "../../assets/user-avatar.png";
 import { logout } from "../../redux/actions/authActions";
 import { useDispatch, useSelector } from "react-redux";
+import LogoutIcon from "../../components/icons/Logout.icon";
 
 const DashboardPage = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -101,11 +102,7 @@ const DashboardPage = () => {
                   </>
                 ) : (
                   <>
-                    Logout{" "}
-                    <i
-                      className="bi bi-box-arrow-right ms-2"
-                      style={{ fontSize: "1rem" }}
-                    ></i>
+                    Logout <span style={{ marginLeft: "8px" }}><LogoutIcon size={20} color="#333" /></span>
                   </>
                 )}
               </DropdownItem>
