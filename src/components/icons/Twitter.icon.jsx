@@ -1,4 +1,3 @@
-// src/components/SocialButtons/TwitterIcon.jsx
 import React from 'react';
 
 const TwitterIcon = ({ size = 18, color = '#fff' }) => {

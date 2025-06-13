@@ -4,6 +4,7 @@ import { Form, FormGroup, Label, Input, Button, Alert } from "reactstrap";
 import { login } from "../../../redux/actions/authActions";
 import { useDispatch } from "react-redux";
 import { validateField, validateForm } from "../../../utils/validationUtils";
+import { isFormButtonDisabled } from "../../../utils/formUtils";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -78,17 +79,12 @@ const Login = () => {
     }
   };
 
-  const hasFieldValidationErrors = () => {
-    const fieldErrors = { ...errors };
-    delete fieldErrors.api;
-    return Object.values(fieldErrors).some((error) => error !== "");
-  };
-
-  const isLoginButtonDisabled =
-    isSubmitting ||
-    !formData.email ||
-    !formData.password ||
-    hasFieldValidationErrors();
+  const isLoginButtonDisabled = isFormButtonDisabled({
+    isSubmitting,
+    formData,
+    requiredFields: loginFields,
+    errors,
+  });
 
   return (
     <>

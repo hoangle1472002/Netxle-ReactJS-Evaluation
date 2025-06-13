@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'reactstrap';
-import FacebookIcon from './icons/facebook.icon';
+import FacebookIcon from './icons/Facebook.icon';
 import TwitterIcon from './icons/Twitter.icon';
 import MailIcon from './icons/Mail.icon';
 import GithubIcon from './icons/Github.icon';

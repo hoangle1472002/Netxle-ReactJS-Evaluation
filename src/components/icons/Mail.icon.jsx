@@ -1,4 +1,3 @@
-// src/components/SocialButtons/MailIcon.jsx
 import React from 'react';
 
 const MailIcon = ({ size = 18, color = '#fff' }) => {

@@ -1,4 +1,3 @@
-// src/components/SocialButtons/GithubIcon.jsx
 import React from 'react';
 
 const GithubIcon = ({ size = 18, color = '#fff' }) => {

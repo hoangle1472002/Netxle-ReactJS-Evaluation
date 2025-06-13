@@ -1,4 +1,3 @@
-// src/components/SocialButtons/FacebookIcon.jsx
 import React from 'react';
 
 const FacebookIcon = ({ size = 18, color = '#fff' }) => {
